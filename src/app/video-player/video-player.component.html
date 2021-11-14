@@ -32,20 +32,14 @@
     preload="auto"
     crossorigin
   >
-    <source
-      src="http://static.videogular.com/assets/videos/videogular.mp4"
-      type="video/mp4"
-    />
-    <source
-      src="http://static.videogular.com/assets/videos/videogular.ogg"
-      type="video/ogg"
-    />
-    <source
-      src="http://static.videogular.com/assets/videos/videogular.webm"
-      type="video/webm"
-    />
-
-    <track
+    <ng-container *ngIf="currentSrc$ | async as src">
+      <source
+        *ngIf="videoExtension$ | async as ext"
+        [src]="src"
+        [type]="'video/' + ext"
+      />
+    </ng-container>
+    <!-- <track
       kind="subtitles"
       label="English"
       src="http://static.videogular.com/assets/subs/pale-blue-dot.vtt"
@@ -57,6 +51,6 @@
       label="Español"
       src="http://static.videogular.com/assets/subs/pale-blue-dot-es.vtt"
       srclang="es"
-    />
+    /> -->
   </video>
 </vg-player>

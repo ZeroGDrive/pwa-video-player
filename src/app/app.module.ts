@@ -17,9 +17,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { VideoPlayerComponent } from './video-player/video-player.component';
+import { FileManagerComponent } from './file-manager/file-manager.component';
 
 @NgModule({
-  declarations: [AppComponent, MainComponent, VideoPlayerComponent],
+  declarations: [AppComponent, MainComponent, VideoPlayerComponent, FileManagerComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
