@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { ControlService } from '../control.service';
 
 @Component({
   selector: 'app-main',
@@ -9,12 +10,17 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent {
-  isHandset$: Observable<boolean> = this.breakpointObserver
+  readonly isHandset$: Observable<boolean> = this._breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
       map((result) => result.matches),
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  readonly currentVideo$ = this._controlService.currentVideo$;
+
+  constructor(
+    private readonly _breakpointObserver: BreakpointObserver,
+    private readonly _controlService: ControlService
+  ) {}
 }

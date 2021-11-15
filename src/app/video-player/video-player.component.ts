@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { filter, map } from 'rxjs/operators';
+import { VgApiService } from '@videogular/ngx-videogular/core';
+import { map } from 'rxjs/operators';
 import { ControlService } from '../control.service';
 
 @Component({
@@ -10,15 +11,33 @@ import { ControlService } from '../control.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VideoPlayerComponent {
-  currentSrc$ = this._controlService.currentVideo$.pipe(
-    filter((url) => url !== null),
-    map((videoUrl) =>
-      this._sanitizer.bypassSecurityTrustResourceUrl(videoUrl as string)
-    )
+  readonly currentVideo$ = this._controlService.currentVideo$.pipe(
+    map((video) => {
+      if (video) {
+        return {
+          url: this._sanitizer.bypassSecurityTrustResourceUrl(video!.url),
+          extension: video!.extension,
+        };
+      }
+      return null;
+    })
   );
-  videoExtension$ = this._controlService.videoExtension$;
+
+  videoApi: VgApiService | null = null;
+
   constructor(
     private readonly _controlService: ControlService,
     private readonly _sanitizer: DomSanitizer
   ) {}
+
+  onPlayerReady(api: VgApiService) {
+    this.videoApi = api;
+
+    this.videoApi.getDefaultMedia().subscriptions.ended.subscribe(() => {
+      if (this.videoApi) {
+        this.videoApi.getDefaultMedia().currentTime = 0;
+        this._controlService.setCurrentVideo(null);
+      }
+    });
+  }
 }

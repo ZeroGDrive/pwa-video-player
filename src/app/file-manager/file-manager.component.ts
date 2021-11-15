@@ -13,10 +13,9 @@ export class FileManagerComponent {
   async onFileOpen(): Promise<void> {
     const [fileHandle] = await (window as any).showOpenFilePicker();
     const file = await fileHandle.getFile();
-    this._controlService.setVideoExtension(file.name.split('.').pop());
+    const ext = file.name.split('.').pop();
     const URL = window.URL || window.webkitURL;
     const src = URL.createObjectURL(file);
-    console.log(src);
-    this._controlService.setCurrentVideo(src);
+    this._controlService.setCurrentVideo({ url: src, extension: ext });
   }
 }

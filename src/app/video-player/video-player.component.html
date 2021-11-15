@@ -1,45 +1,43 @@
-<vg-player>
-  <vg-overlay-play></vg-overlay-play>
-  <vg-buffering></vg-buffering>
+<ng-container *ngIf="{ video: currentVideo$ | async } as config">
+  <vg-player (onPlayerReady)="onPlayerReady($event)">
+    <vg-overlay-play *ngIf="config.video"></vg-overlay-play>
+    <vg-buffering></vg-buffering>
 
-  <vg-scrub-bar>
-    <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-    <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-  </vg-scrub-bar>
+    <vg-scrub-bar>
+      <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+      <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+    </vg-scrub-bar>
 
-  <vg-controls>
-    <vg-play-pause></vg-play-pause>
-    <vg-playback-button></vg-playback-button>
+    <vg-controls>
+      <vg-play-pause></vg-play-pause>
+      <vg-playback-button></vg-playback-button>
 
-    <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+      <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
 
-    <vg-scrub-bar style="pointer-events: none"></vg-scrub-bar>
+      <vg-scrub-bar style="pointer-events: none"></vg-scrub-bar>
 
-    <vg-time-display vgProperty="left" vgFormat="mm:ss"></vg-time-display>
-    <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+      <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
 
-    <vg-track-selector></vg-track-selector>
-    <vg-mute></vg-mute>
-    <vg-volume></vg-volume>
+      <vg-track-selector></vg-track-selector>
+      <vg-mute></vg-mute>
+      <vg-volume></vg-volume>
 
-    <vg-fullscreen></vg-fullscreen>
-  </vg-controls>
+      <vg-fullscreen></vg-fullscreen>
+    </vg-controls>
 
-  <video
-    [vgMedia]="$any(media)"
-    #media
-    id="singleVideo"
-    preload="auto"
-    crossorigin
-  >
-    <ng-container *ngIf="currentSrc$ | async as src">
+    <video
+      [vgMedia]="$any(media)"
+      #media
+      id="singleVideo"
+      preload="auto"
+      crossorigin
+    >
       <source
-        *ngIf="videoExtension$ | async as ext"
-        [src]="src"
-        [type]="'video/' + ext"
+        *ngIf="config.video"
+        [src]="config.video.url"
+        [type]="'video/' + config.video.extension"
       />
-    </ng-container>
-    <!-- <track
+      <!-- <track
       kind="subtitles"
       label="English"
       src="http://static.videogular.com/assets/subs/pale-blue-dot.vtt"
@@ -52,5 +50,6 @@
       src="http://static.videogular.com/assets/subs/pale-blue-dot-es.vtt"
       srclang="es"
     /> -->
-  </video>
-</vg-player>
+    </video>
+  </vg-player>
+</ng-container>

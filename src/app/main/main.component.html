@@ -1,6 +1,7 @@
 <ng-container
   *ngIf="{
-    isHandset: isHandset$ | async
+    isHandset: isHandset$ | async,
+    currentVideo: currentVideo$ | async
   } as pageConfig"
 >
   <mat-sidenav-container class="sidenav-container">
@@ -14,13 +15,13 @@
     >
       <mat-toolbar>Menu</mat-toolbar>
       <mat-nav-list>
-        <a mat-list-item href="#">Link 1</a>
+        <!-- <a mat-list-item href="#">Link 1</a>
         <a mat-list-item href="#">Link 2</a>
-        <a mat-list-item href="#">Link 3</a>
+        <a mat-list-item href="#">Link 3</a> -->
       </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content>
-      <mat-toolbar color="primary">
+    <mat-sidenav-content class="main-container">
+      <mat-toolbar *ngIf="pageConfig.currentVideo === null" color="primary">
         <button
           type="button"
           aria-label="Toggle sidenav"
@@ -30,10 +31,12 @@
         >
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
-        <span>pwa-video-player</span>
+        <span>PWA Video Player</span>
       </mat-toolbar>
       <app-video-player></app-video-player>
-      <app-file-manager></app-file-manager>
+      <app-file-manager
+        *ngIf="pageConfig.currentVideo === null"
+      ></app-file-manager>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </ng-container>
