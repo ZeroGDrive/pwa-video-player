@@ -8,10 +8,25 @@ import { ControlService } from '../control.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileManagerComponent {
+  pickerOpts = {
+    types: [
+      {
+        description: 'Videos',
+        accept: {
+          'video/*': ['.mp4', '.mkv', '.avi'],
+        },
+      },
+    ],
+    excludeAcceptAllOption: true,
+    multiple: false,
+  };
+
   constructor(private readonly _controlService: ControlService) {}
 
   async onFileOpen(): Promise<void> {
-    const [fileHandle] = await (window as any).showOpenFilePicker();
+    const [fileHandle] = await (window as any).showOpenFilePicker(
+      this.pickerOpts
+    );
     const file = await fileHandle.getFile();
     const ext = file.name.split('.').pop();
     const URL = window.URL || window.webkitURL;
