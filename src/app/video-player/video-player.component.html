@@ -9,16 +9,19 @@
     </vg-scrub-bar>
 
     <vg-controls>
-      <vg-play-pause></vg-play-pause>
+      <vg-play-pause *ngIf="config.video"></vg-play-pause>
       <vg-playback-button></vg-playback-button>
 
       <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+      <button mat-button *ngIf="config.video" (click)="onFileOpen()">
+        Open File
+      </button>
 
       <vg-scrub-bar style="pointer-events: none"></vg-scrub-bar>
 
       <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
 
-      <vg-track-selector></vg-track-selector>
+      <!-- <vg-track-selector></vg-track-selector> -->
       <vg-mute></vg-mute>
       <vg-volume></vg-volume>
 
@@ -32,11 +35,7 @@
       preload="auto"
       crossorigin
     >
-      <source
-        *ngIf="config.video"
-        [src]="config.video.url"
-        [type]="'video/' + config.video.extension"
-      />
+      <ng-container #sourceContainer></ng-container>
       <!-- <track
       kind="subtitles"
       label="English"
@@ -53,3 +52,7 @@
     </video>
   </vg-player>
 </ng-container>
+
+<ng-template #source let-url let-ext="extension">
+  <source [src]="url" [type]="'video/' + ext" />
+</ng-template>
